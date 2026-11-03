@@ -1,14 +1,74 @@
-// Hito 2 · Consultas
-//
-// Al menos 6 funciones:
-//   - filtrar por un criterio
-//   - buscar por id
-//   - ordenar por dos criterios
-//   - comprobar una condición (some o every)
-//   - totalizar con reduce
-//   - obtener una lista sin repetidos
-// Ninguna modifica las listas originales.
-// Para leer un dato de una fila, usa tus constantes: libro[L_TITULO], no libro[1].
+// Hito 3 · Map, Set y funciones avanzadas (también aquí)
+//   - un índice Map id → fila que usen tus búsquedas
+/**
+ * Crea un índice que relaciona el id de cada fila con la fila completa.
+ * @param {Array[]} lista  Lista de filas (productos, clientes o pedidos)
+ * @param {number} posId   Posición del id dentro de cada fila, por ejemplo PR_ID
+ * @returns {Map<number, Array>} Map id → fila
+ */
+function crearIndice(lista, posId) {
+	return new Map(lista.map((fila) => [fila[posId], fila]));
+}
+
+const indiceProductos = crearIndice(productos, PR_ID);
+const indiceClientes = crearIndice(clientes, CL_ID);
+
+//   - una agrupación por categoría en un Map
+/**
+ * Agrupa los nombres de los productos por su categoría.
+ * @returns {Map<string, string[]>} Map categoría → nombres de los productos de esa categoría
+ */
+function productosPorCategoria() {
+	return productos.reduce((mapa, fila) => {
+		const categoria = fila[PR_CATEGORIA];
+
+		if (!mapa.has(categoria)) {
+			mapa.set(categoria, []);
+		}
+
+		mapa.get(categoria).push(fila[PR_NOMBRE]);
+		return mapa;
+	}, new Map());
+}
+
+//   - un Set de valores únicos
+/**
+ * Devuelve las categorías de los productos sin repetidos.
+ * @returns {Set<string>} Categorías únicas
+ */
+function categorias(){
+	return new Set(productos.map((fila) => fila[PR_CATEGORIA]));
+}
+
+//   - un closure (por ejemplo, un generador de id)
+/**
+ * Crea un generador de ids que empieza después del último id usado.
+ * Cada llamada a la función devuelta da el siguiente id (closure).
+ * @param {number} ultimo  Último id usado, por ejemplo 16
+ * @returns {function(): number} Función que devuelve un id nuevo cada vez que se llama
+ */
+function crearGeneradorId(ultimo) {
+	let actual = ultimo;
+	return () => {
+		actual++;
+		return actual;
+	};
+}
+const siguienteProducto = crearGeneradorId(16);
+siguienteProducto();
+siguienteProducto();
+
+//   - una función propia que reciba otra función como parámetro
+/**
+ * Devuelve las filas de una lista que cumplen una condición.
+ * No modifica la lista original.
+ * @param {Array[]} lista  Lista de filas a filtrar
+ * @param {function(Array): boolean} condicion  Función que recibe una fila y devuelve true si se queda
+ * @returns {Array[]} Filas que cumplen la condición (lista vacía si no hay ninguna)
+ */
+function filtrarPor(lista, condicion){
+	return lista.filter(condicion);
+}
 
 /**
  * Convierte un texto con un importe (admite coma decimal) en un número.
@@ -34,8 +94,8 @@ function aNumero(texto) {
  * @param {number} id  Id del producto buscado
  * @returns {Array|undefined} La fila del producto, o undefined si no existe
  */
-function buscarPorIdProducto(id) {
-	return productos.find((fila) => fila[PR_ID] === id);
+function buscarProducto(id) {
+	return indiceProductos.get(id);
 }
 
 /**
@@ -43,8 +103,8 @@ function buscarPorIdProducto(id) {
  * @param {number} id  Id del cliente buscado
  * @returns {Array|undefined} La fila del cliente, o undefined si no existe
  */
-function buscarPorIdCliente(id) {
-	return clientes.find((fila) => fila[CL_ID] === id);
+function buscarCliente(id) {
+	return indiceClientes.get(id);
 }
 
 /**
@@ -52,7 +112,7 @@ function buscarPorIdCliente(id) {
  * @param {number} id  Id del pedido buscado
  * @returns {Array|undefined} La fila del pedido, o undefined si no existe
  */
-function buscarPorIdPedido(id) {
+function buscarPedido(id) {
 	return pedidos.find((fila) => fila[PE_ID] === id);
 }
 
@@ -63,7 +123,7 @@ function buscarPorIdPedido(id) {
  * @returns {Array[]} Productos de esa categoría (lista vacía si no hay ninguno)
  */
 function buscarPorCategoria(categoria) {
-	return productos.filter((p) => p[PR_CATEGORIA] === categoria);
+	return filtrarPor(productos, (fila) => fila[PR_CATEGORIA] === categoria);
 }
 
 /**
@@ -137,7 +197,7 @@ function importeTotalPedidosEntregados() {
  * @throws {Error} Si el precio del producto no es un importe válido
  */
 function precioProducto(idProducto) {
-	return aNumero(buscarPorIdProducto(idProducto)[PR_PRECIO]);
+	return aNumero(buscarProducto(idProducto)[PR_PRECIO]);
 }
 
 // Lista sin repetidos. Por ejemplo, los autores. Quita los vacíos y ordénala.
@@ -146,31 +206,10 @@ function precioProducto(idProducto) {
  * @returns {string[]} Marcas únicas ordenadas
  */
 function marcasOrdenadas() {
-	const marcas = productos.map((p) => p[PR_MARCA]);
-	let unicas = [];
-	marcas.forEach((m) => {
-		if (!unicas.includes(m) && m !== '') {
-			unicas.push(m);
-		}
-	});
-	return unicas.sort((a, b) => a.localeCompare(b));
+	const marcas = productos.map((fila) => fila[PR_MARCA])
+		.filter((marca) => marca !== "");
+	
+	const unicas = new Set(marcas);
+	
+	return [...unicas].sort((a, b) => a.localeCompare(b));
 }
-
-// Hito 3 · Map, Set y funciones avanzadas (también aquí)
-//   - un índice Map id → fila que usen tus búsquedas
-//   - una agrupación por categoría en un Map
-//   - un Set de valores únicos
-//   - un closure (por ejemplo, un generador de id)
-//   - una función propia que reciba otra función como parámetro
-//
-// Cada función lleva su comentario JSDoc, por ejemplo:
-//
-// /**
-//  * Devuelve los libros de un género.
-//  * @param {Array[]} libros  Lista de libros (cada libro es una fila)
-//  * @param {string} genero   Género buscado
-//  * @returns {Array[]} Libros de ese género
-//  */
-// function librosDeGenero(libros, genero) {
-//   return libros.filter((libro) => libro[L_GENERO] === genero);
-// }

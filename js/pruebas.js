@@ -22,8 +22,6 @@
 //
 // Necesitas 10 pruebas o más, 2 de ellas de tu regla personal.
 
-// Borra esta prueba cuando escribas la primera tuya.
-
 // A número:
 prueba('aNumero devuelve el numero 3', () => {
 	igual(aNumero('3,5'), 3.5);
@@ -34,28 +32,32 @@ prueba('aNumero lanza un error si el texto no es un número', () => {
 });
 
 // Buscar por id:
-prueba('buscarPorIdProducto devuelve el producto 3', () => {
-	igual(buscarPorIdProducto(3)[PR_NOMBRE], 'Queso manchego cuña');
+prueba('buscarProducto devuelve el producto 3', () => {
+	igual(buscarProducto(3)[PR_NOMBRE], 'Queso manchego cuña');
 });
 
-prueba('buscarPorIdProducto devuelve undefined si el producto no existe', () => {
-	igual(buscarPorIdProducto(99), undefined);
+prueba('buscarProducto devuelve el producto 16', () => {
+	igual(buscarProducto(16)[PR_NOMBRE], 'Ñoquis de patata');
 });
 
-prueba('buscarPorIdCliente devuelve el cliente 5', () => {
-	igual(buscarPorIdCliente(5)[CL_NOMBRE], 'Andrés Gómez');
+prueba('buscarProducto devuelve undefined si el producto no existe', () => {
+	igual(buscarProducto(99), undefined);
 });
 
-prueba('buscarPorIdCliente devuelve undefined si el cliente no existe', () => {
-	igual(buscarPorIdCliente(99), undefined);
+prueba('buscarCliente devuelve el cliente 5', () => {
+	igual(buscarCliente(5)[CL_NOMBRE], 'Andrés Gómez');
 });
 
-prueba('buscarPorIdPedido devuelve el pedido 9', () => {
-	igual(buscarPorIdPedido(9)[PE_PRODUCTO], 10);
+prueba('buscarCliente devuelve undefined si el cliente no existe', () => {
+	igual(buscarCliente(99), undefined);
 });
 
-prueba('buscarPorIdPedido devuelve undefined si el pedido no existe', () => {
-	igual(buscarPorIdPedido(99), undefined);
+prueba('buscarPedido devuelve el pedido 9', () => {
+	igual(buscarPedido(9)[PE_PRODUCTO], 10);
+});
+
+prueba('buscarPedido devuelve undefined si el pedido no existe', () => {
+	igual(buscarPedido(99), undefined);
 });
 
 // Filtrar por un criterio:
@@ -157,4 +159,43 @@ prueba('las marcas salen sin repetir', () => {
 		'Rana',
 		'SOS'
 	]);
+});
+
+// Hito 3 · Map, Set y funciones avanzadas
+// Agrupación por categoría en un Map:
+prueba('productosPorCategoria devuelve los nombres de los productos de la categoría fruta', () => {
+	igual(productosPorCategoria().get('fruta'), ['Manzanas golden 1kg', 'Plátanos de Canarias 1kg']);
+});
+
+prueba('productosPorCategoria tiene 5 categorías', () => {
+	igual(productosPorCategoria().size, 5);
+});
+
+// Set de valores únicos:
+prueba('categorias devuelve el Set con las categorías sin repetir', () => {
+	igual(categorias(), new Set(['lácteos', 'panadería', 'fruta', 'despensa', 'bebidas']));
+});
+
+// Closure:
+prueba('crearGeneradorId da ids seguidos: 13 y 14', () => {
+	const siguiente = crearGeneradorId(12);
+	igual(siguiente(), 13);
+	igual(siguiente(), 14);
+});
+
+prueba('crearGeneradorId: dos generadores no se pisan', () => {
+	const primero = crearGeneradorId(12);
+	const segundo = crearGeneradorId(12);
+	primero();
+	primero();
+	igual(segundo(), 13);
+});
+
+// Función que recibe otra función como parámetro:
+// Uso map para sacar solo el id de las filas que devuelve filtrarPor.
+prueba('filtrarPor con stock 0 devuelve solo el queso (id 3)', () => {
+	igual(
+		filtrarPor(productos, (p) => p[PR_STOCK] === 0).map((p) => p[PR_ID]),
+		[3]
+	);
 });
