@@ -66,6 +66,23 @@ function buscarPorCategoria(categoria) {
 	return productos.filter((p) => p[PR_CATEGORIA] === categoria);
 }
 
+/**
+ * Devuelve los productos de una marca.
+ * @param {string} marca  Marca buscada
+ * @returns {Array[]} Productos de esa marca (lista vacía si no hay ninguno)
+ */
+function buscarPorMarca(marca) {
+	return productos.filter((p) => p[PR_MARCA] === marca);
+}
+
+/**
+ * Devuelve los pedidos según su estado de entrega.
+ * @param {boolean} entregado  true para los entregados, false para los pendientes
+ * @returns {Array[]} Pedidos con ese estado (lista vacía si no hay ninguno)
+ */
+function buscarPedidosEntregados(entregado) {
+	return pedidos.filter((p) => p[PE_ENTREGADO] === entregado);
+}
 // Ordenar por dos criterios: sort modifica el array, así que copia antes la lista con [...lista]. Para el segundo criterio, usa ||: si el primero empata (da 0), se usa el segundo:
 
 /**
