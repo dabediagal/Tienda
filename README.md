@@ -25,20 +25,20 @@ Una entrada al final de cada sesión: fecha, qué has hecho y qué te ha costado
 - 30/10/2026 · Hecho: He creado los 3 arrays con los datos iniciales de la tienda.
   Me ha costado: En el hito 1 nada exactamente, porque lo hice siguiendo el ejemplo del profesor.
   He preguntado: Nada.
-- 03/11/2026 · Hecho: 
-  Me ha costado: 
-  He preguntado: Nada.
+- 03/11/2026 · Hecho: He creado funciones para consultar los datos que introduje la clase pasada y he probado cada una.
+  Me ha costado: Nada en especial.
+  He preguntado: Cómo podemos comprobar que las listas de datos originales no han sido modificadas.
 
 ## Uso de IA
 
 Si no la has usado, escribe «No he usado IA».
 
 - Herramienta: Claude 
-- Para qué la usé (explicar, depurar, generar código): La use para generar datos
-- Qué le pedí (resumen): que me genere datos para los arrays
+- Para qué la usé (explicar, depurar, generar código): La use para generar datos, calcular datos para comprobar que las pruebas pasan correctamente.
+- Qué le pedí (resumen): que me genere datos para los arrays, que calcule por su cuenta el resultado de las funciones que yo implementé para comparar los resultados.
 - Qué cambié yo y por qué:
 - Qué he aprendido:
 
 ## Git (opcional)
 
-Si llevas el proyecto en Git, pon aquí el enlace al repositorio:
+https://github.com/dabediagal/Tienda
