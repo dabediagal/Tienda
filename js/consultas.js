@@ -36,7 +36,7 @@ function productosPorCategoria() {
  * Devuelve las categorías de los productos sin repetidos.
  * @returns {Set<string>} Categorías únicas
  */
-function categorias(){
+function categorias() {
 	return new Set(productos.map((fila) => fila[PR_CATEGORIA]));
 }
 
@@ -54,9 +54,6 @@ function crearGeneradorId(ultimo) {
 		return actual;
 	};
 }
-const siguienteProducto = crearGeneradorId(16);
-siguienteProducto();
-siguienteProducto();
 
 //   - una función propia que reciba otra función como parámetro
 /**
@@ -66,7 +63,7 @@ siguienteProducto();
  * @param {function(Array): boolean} condicion  Función que recibe una fila y devuelve true si se queda
  * @returns {Array[]} Filas que cumplen la condición (lista vacía si no hay ninguna)
  */
-function filtrarPor(lista, condicion){
+function filtrarPor(lista, condicion) {
 	return lista.filter(condicion);
 }
 
@@ -77,12 +74,12 @@ function filtrarPor(lista, condicion){
  * @throws {Error} Si el texto está vacío o no es un número válido
  */
 function aNumero(texto) {
-	const limpio = String(texto).trim().replace(',', '.');
+	const limpio = String(texto).trim().replace(",", ".");
 
 	const numero = Number(limpio);
 
-	if (limpio === '' || Number.isNaN(numero)) {
-		throw new Error('Importe no válido');
+	if (limpio === "" || Number.isNaN(numero)) {
+		throw new Error("Importe no válido");
 	}
 
 	return numero;
@@ -206,10 +203,9 @@ function precioProducto(idProducto) {
  * @returns {string[]} Marcas únicas ordenadas
  */
 function marcasOrdenadas() {
-	const marcas = productos.map((fila) => fila[PR_MARCA])
-		.filter((marca) => marca !== "");
-	
+	const marcas = productos.map((fila) => fila[PR_MARCA]).filter((marca) => marca !== "");
+
 	const unicas = new Set(marcas);
-	
+
 	return [...unicas].sort((a, b) => a.localeCompare(b));
 }
